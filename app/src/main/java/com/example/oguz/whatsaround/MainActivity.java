@@ -14,7 +14,7 @@ public class MainActivity extends AppCompatActivity {
 
         LoginFirstFragment fr = new LoginFirstFragment();
         this.getSupportFragmentManager().beginTransaction()
-                .replace(R.id.fragment_container,fr).addToBackStack("login_fragment").commit();
+                .replace(R.id.fragment_container,fr).addToBackStack("login").commit();
 
     }
 }
