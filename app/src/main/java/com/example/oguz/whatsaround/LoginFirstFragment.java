@@ -41,11 +41,12 @@ public class LoginFirstFragment extends Fragment {
                         .replace(R.id.fragment_container,fr).addToBackStack("login").commit();
             }
         });
-
         btnComp.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //Firma ekranını çağır.
+                Fragment fr = new FirmaLoginFirstFragment();
+                getActivity().getSupportFragmentManager().beginTransaction()
+                        .replace(R.id.fragment_container,fr).addToBackStack("login").commit();
             }
         });
         return v;

@@ -22,7 +22,7 @@
             android:text="Giriş Yap" />
 
         <Button
-            android:id="@+id/btnKayit"
+            android:id="@+id/btnSingup"
             android:background="@color/buttoncolor"
             android:layout_gravity="center"
             android:layout_width="175dp"

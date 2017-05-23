@@ -92,10 +92,10 @@
             android:inputType="textPersonName" />
 
         <Button
-            android:id="@+id/btnKaydol"
+            android:id="@+id/btnOk"
             android:layout_width="189dp"
             android:layout_height="wrap_content"
-            android:text="Kaydol"/>
+            android:text="Kaydol" />
 
 
     </LinearLayout>
