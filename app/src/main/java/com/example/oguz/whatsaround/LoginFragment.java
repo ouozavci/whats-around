@@ -1,5 +1,6 @@
 package com.example.oguz.whatsaround;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -49,9 +50,8 @@ public class LoginFragment extends Fragment {
                 if(email.equals("") || pass.equals("")){
                     Toast.makeText(getContext(),"Bütün alanları doldurun!",Toast.LENGTH_SHORT).show();
                 }else{
-
+                    signin(email,pass);
                 }
-
             }
         });
         return v;
@@ -63,12 +63,13 @@ public class LoginFragment extends Fragment {
                 if(task.isSuccessful()){
                     Log.d("login", "signInWithEmail:success");
                     FirebaseUser user = mAuth.getCurrentUser();
+                    updateUI(user);
                 }
                 else{
                     Log.w("login", "signInWithEmail:failure", task.getException());
-                    Toast.makeText(getContext(), "Authentication failed.",
+                    Toast.makeText(getContext(), task.getException().getMessage(),
                             Toast.LENGTH_SHORT).show();
-                    updateUI(null);
+
                 }
             }
         });
@@ -82,7 +83,9 @@ public class LoginFragment extends Fragment {
         }
         else {
             //Kullanıcıya özel sayfayı yükle
-
+            Intent i = new Intent(getActivity(), UserActivity.class);
+            i.putExtra("email",user.getEmail());
+            startActivity(i);
         }
     }
 }

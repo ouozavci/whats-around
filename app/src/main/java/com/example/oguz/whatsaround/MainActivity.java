@@ -1,5 +1,6 @@
 package com.example.oguz.whatsaround;
 
+import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.Layout;
@@ -14,7 +15,6 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         mAuth = FirebaseAuth.getInstance();
-
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
     }
@@ -32,8 +32,9 @@ public class MainActivity extends AppCompatActivity {
                     .replace(R.id.fragment_container,fr).addToBackStack("login").commit();
         }
         else {
-            //Kullanıcıya özel sayfayı yükle
-
+            Intent i = new Intent(MainActivity.this, UserActivity.class);
+            i.putExtra("email",user.getEmail());
+            startActivity(i);
         }
     }
 
