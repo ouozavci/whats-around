@@ -27,7 +27,16 @@ public class FirmaLoginFirstFragment extends Fragment {
                         .beginTransaction().replace(R.id.fragment_container,fr).addToBackStack("login").commit();
             }
         });
+        Button btnLogin = (Button) v.findViewById(R.id.btnGiris);
+        btnLogin.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Fragment fr = new FirmaLoginFragment();
+                getActivity().getSupportFragmentManager()
+                        .beginTransaction().replace(R.id.fragment_container,fr).addToBackStack("login").commit();
 
+            }
+        });
         return v;
     }
 }

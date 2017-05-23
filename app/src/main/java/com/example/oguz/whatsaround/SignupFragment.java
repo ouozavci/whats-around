@@ -19,6 +19,8 @@ import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.UserProfileChangeRequest;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 
 /**
  * Created by oguz on 23.05.2017.
@@ -30,6 +32,7 @@ public class SignupFragment extends Fragment {
     EditText txtName, txtSurname, txtEmail, txtPassword, txtPassword2;
 
     FirebaseAuth mAuth;
+    DatabaseReference mDatabase;
 
     @Nullable
     @Override
@@ -37,6 +40,7 @@ public class SignupFragment extends Fragment {
         View v = inflater.inflate(R.layout.fragment_signup, container, false);
 
         mAuth = FirebaseAuth.getInstance();
+        mDatabase = FirebaseDatabase.getInstance().getReference();
 
         btnOk = (Button) v.findViewById(R.id.btnOk);
         txtName = (EditText) v.findViewById(R.id.txtName);
@@ -77,6 +81,10 @@ public class SignupFragment extends Fragment {
                             // Sign in success, update UI with the signed-in user's information
                             Log.d("signup", "createUserWithEmail:success");
                             FirebaseUser user = mAuth.getCurrentUser();
+
+                            //Set the user type
+                            mDatabase.child("user_type").child(user.getUid()).setValue("user");
+
                             UserProfileChangeRequest profileUpdates = new UserProfileChangeRequest.Builder()
                                     .setDisplayName(name + " " + surname)
                                     .build();

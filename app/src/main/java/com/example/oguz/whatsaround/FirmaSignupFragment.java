@@ -30,6 +30,7 @@ import com.google.firebase.database.ValueEventListener;
 
 import org.json.JSONArray;
 import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -120,7 +121,10 @@ public class FirmaSignupFragment extends Fragment {
                             Log.d("signup", "createUserWithEmail:success");
                             FirebaseUser user = mAuth.getCurrentUser();
                             mDatabase.child("companies").child(comp.serviceId+"").child(user.getUid()).setValue(comp);
-                            updateUI(user);
+
+                            mDatabase.child("user_type").child(user.getUid()).setValue("comp");
+
+                            updateUI(user,user.getUid(),comp.serviceId);
                         } else {
                             Log.w("signup", "createUserWithEmail:failure", task.getException());
                             Toast.makeText(getContext(), task.getException().getMessage(),
@@ -129,15 +133,16 @@ public class FirmaSignupFragment extends Fragment {
                     }
                 });
     }
-    public void updateUI(FirebaseUser user) {
+    public void updateUI(FirebaseUser user,String uid,int serviceId) {
         if (user == null) {
             LoginFirstFragment fr = new LoginFirstFragment();
             getActivity().getSupportFragmentManager().beginTransaction()
                     .replace(R.id.fragment_container, fr).addToBackStack("login").commit();
         } else {
             //Kullanıcıya özel sayfayı yükle
-            Intent i = new Intent(getActivity(), UserActivity.class);
-            i.putExtra("email", user.getEmail());
+            Intent i = new Intent(getActivity(), FirmaActivity.class);
+            i.putExtra("comp",uid);
+            i.putExtra("service",serviceId);
             startActivity(i);
         }
     }

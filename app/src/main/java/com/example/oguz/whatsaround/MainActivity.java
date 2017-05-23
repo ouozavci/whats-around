@@ -4,17 +4,32 @@ import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.Layout;
+import android.widget.ArrayAdapter;
 import android.widget.FrameLayout;
+import android.widget.Toast;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
 
     private FirebaseAuth mAuth;
+    private DatabaseReference mDatabase;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         mAuth = FirebaseAuth.getInstance();
+        mDatabase = FirebaseDatabase.getInstance().getReference();
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
     }
@@ -25,16 +40,36 @@ public class MainActivity extends AppCompatActivity {
         updateUI(currentUser);
     }
 
-    public void updateUI(FirebaseUser user){
+    public void updateUI(final FirebaseUser user){
         if(user == null){
             LoginFirstFragment fr = new LoginFirstFragment();
             this.getSupportFragmentManager().beginTransaction()
                     .replace(R.id.fragment_container,fr).addToBackStack("login").commit();
         }
         else {
-            Intent i = new Intent(MainActivity.this, UserActivity.class);
-            i.putExtra("email",user.getEmail());
-            startActivity(i);
+
+            mDatabase.addListenerForSingleValueEvent(new ValueEventListener() {
+                @Override
+                public void onDataChange(DataSnapshot dataSnapshot) {
+                    String type = dataSnapshot.child("user_type").child(user.getUid()).getValue().toString();
+                    if(type.equals("comp")){
+                        Intent i = new Intent(MainActivity.this, FirmaActivity.class);
+
+                        startActivity(i);
+                    }
+                    else {
+                        Intent i = new Intent(MainActivity.this, UserActivity.class);
+                        i.putExtra("email",user.getEmail());
+                        startActivity(i);
+                    }
+                }
+                @Override
+                public void onCancelled(DatabaseError databaseError) {
+
+                }
+            });
+
+
         }
     }
 
