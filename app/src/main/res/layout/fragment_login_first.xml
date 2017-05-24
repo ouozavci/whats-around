@@ -19,8 +19,8 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:background="@color/buttoncolor"
-        android:text="Giriş"
-            android:textColor="#FFFFFF"
+            android:textColor="@color/buttonTextColor"
+            android:text="Giriş"
             android:textSize="17dp"/>
 
         <Button
@@ -31,7 +31,7 @@
             android:background="@color/buttoncolor"
             android:text="Üye ol"
             android:layout_marginTop="10dp"
-            android:textColor="#FFFFFF"
+            android:textColor="@color/buttonTextColor"
             android:textSize="17dp"/>
     </LinearLayout>
 
@@ -42,7 +42,7 @@
         android:layout_alignParentBottom="true"
         android:layout_alignParentEnd="true"
         android:layout_marginBottom="11dp"
-        android:background="@color/buttoncolor"
+        android:background="@color/firmaButtonColor"
         android:text="Firma Giriş"
         android:textColor="#FFFFFF"
         android:textSize="17dp" />

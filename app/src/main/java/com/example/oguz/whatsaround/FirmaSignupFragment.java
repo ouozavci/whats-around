@@ -121,10 +121,18 @@ public class FirmaSignupFragment extends Fragment {
                             Log.d("signup", "createUserWithEmail:success");
                             FirebaseUser user = mAuth.getCurrentUser();
 
-                            mDatabase.child("companies").child(user.getUid()).setValue(comp);
-                            mDatabase.child("company_list").child(comp.serviceId+"").child(user.getUid()).setValue("0.0$0.0");
+                            mDatabase.child("companies").child(user.getUid()).child("name").setValue(comp.getName());
+                            mDatabase.child("companies").child(user.getUid()).child("phone").setValue(comp.getPhone());
+                            mDatabase.child("companies").child(user.getUid()).child("email").setValue(comp.getEmail());
+                            mDatabase.child("companies").child(user.getUid()).child("serviceId").setValue(comp.getServiceId());
 
-                            updateUI(user,user.getUid(),comp.serviceId);
+
+                            double lat = getArguments().getDouble("lat");
+                            double lng = getArguments().getDouble("lng");
+
+                            mDatabase.child("company_list").child(comp.getServiceId()+"").child(user.getUid()).setValue(lat+"$"+lng);
+
+                            updateUI(user,user.getUid(),comp.getServiceId());
                         } else {
                             Log.w("signup", "createUserWithEmail:failure", task.getException());
                             Toast.makeText(getContext(), task.getException().getMessage(),

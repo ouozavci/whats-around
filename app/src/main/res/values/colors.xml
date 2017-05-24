@@ -3,6 +3,8 @@
     <color name="colorPrimary">#3F51B5</color>
     <color name="colorPrimaryDark">#303F9F</color>
     <color name="colorAccent">#FF4081</color>
-    <color name="background">#CCFFE5</color>
-    <color name="buttoncolor">#BA55D3</color>
+    <color name="background">#FFFFFF</color>
+    <color name="buttoncolor">#c0d7ff</color>
+    <color name="buttonTextColor">#000000</color>
+    <color name="firmaButtonColor">#ff00e5</color>
 </resources>

@@ -1,5 +1,6 @@
 package com.example.oguz.whatsaround;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.annotation.StringDef;
@@ -70,7 +71,13 @@ public class HizmetlerFragment extends Fragment {
         }
         submit.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
-               Toast.makeText(getContext(),rg.getCheckedRadioButtonId()+"",Toast.LENGTH_SHORT).show();
+               //Toast.makeText(getContext(),rg.getCheckedRadioButtonId()+"",Toast.LENGTH_SHORT).show();
+                Fragment fr = new CompanyListFragment();
+                Bundle bundle = new Bundle();
+                bundle.putInt("service_id",rg.getCheckedRadioButtonId());
+                fr.setArguments(bundle);
+                getActivity().getSupportFragmentManager().beginTransaction()
+                        .replace(R.id.fragment_container,fr).addToBackStack("user").commit();
             }
         });
     }

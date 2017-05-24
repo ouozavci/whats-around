@@ -48,7 +48,7 @@ public class FirmaFragment extends Fragment {
                     String email = dataSnapshot.child(uid).child("email").getValue().toString();
                     String phone = dataSnapshot.child(uid).child("phone").getValue().toString();
 
-                    textView.setText(name);
+                    textView.setText(name.replaceAll("@"," "));
                 }
             }
             @Override
