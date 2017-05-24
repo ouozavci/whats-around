@@ -45,6 +45,7 @@ public class CompanyListViewAdapter extends ArrayAdapter<Company> {
             tvEmail.setText(comp.getEmail());
             tvPhone.setText(comp.getPhone());
 
+
         }
         return view;
     }

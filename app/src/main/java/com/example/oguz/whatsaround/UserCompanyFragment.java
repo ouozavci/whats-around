@@ -1,12 +1,14 @@
 package com.example.oguz.whatsaround;
 
+import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -16,29 +18,27 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
-import org.json.JSONArray;
-import org.json.JSONException;
 /**
- * Created by oguz on 23.05.2017.
+ * Created by oguz on 25.05.2017.
  */
 
-public class FirmaFragment extends Fragment {
-
+public class UserCompanyFragment extends Fragment {
     DatabaseReference mDatabase;
-
-    @Nullable
-    @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View v = inflater.inflate(R.layout.fragment_firma,container,false);
-        final String uid = getActivity().getIntent().getStringExtra("uid");
+        View v = inflater.inflate(R.layout.fragment_user_company,container,false);
+        final String uid = getArguments().getString("uid");
 
         if(uid==null) {
             Toast.makeText(getContext(),"Something went wrong!",Toast.LENGTH_SHORT).show();
             return null;
         }
 
-        final TextView textView = (TextView) v.findViewById(R.id.txtFirmaName);
+        final TextView tvName = (TextView) v.findViewById(R.id.txtFirmaName);
         final TextView tvPhone = (TextView) v.findViewById(R.id.tvPhone);
+        final Button btnCall = (Button) v.findViewById(R.id.btnCall);
+        final Button btnSms = (Button) v.findViewById(R.id.btnSms);
+        final Button btnDirections = (Button) v.findViewById(R.id.btnDirections);
+
 
         mDatabase = FirebaseDatabase.getInstance().getReference();
         mDatabase.addListenerForSingleValueEvent(new ValueEventListener() {
@@ -47,12 +47,12 @@ public class FirmaFragment extends Fragment {
                 if(dataSnapshot.child("companies").child(uid).exists()){
                     String name = dataSnapshot.child("companies").child(uid).child("name").getValue().toString();
                     String email = dataSnapshot.child("companies").child(uid).child("email").getValue().toString();
-                    String phone = dataSnapshot.child("companies").child(uid).child("phone").getValue().toString();
+                    final String phone = dataSnapshot.child("companies").child(uid).child("phone").getValue().toString();
                     String service_id = dataSnapshot.child("companies").child(uid).child("serviceId").getValue().toString();
 
                     String latlng = dataSnapshot.child("company_list").child(service_id).child(uid).getValue().toString();
 
-                    textView.setText(name.replaceAll("@"," "));
+                    tvName.setText(name.replaceAll("@"," "));
                     tvPhone.setText(phone);
 
                     String strLat = latlng.split("-")[0];
@@ -69,6 +69,22 @@ public class FirmaFragment extends Fragment {
                     fr.setArguments(bundle);
                     getActivity().getSupportFragmentManager().beginTransaction()
                             .add(R.id.map_container,fr).commit();
+
+                    btnCall.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            Intent callIntent = new Intent(Intent.ACTION_CALL);
+                            callIntent.setData(Uri.parse("tel:"+phone));
+                            startActivity(callIntent);
+                        }
+                    });
+                    btnSms.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse("sms:" + phone));
+                            startActivity(intent);
+                        }
+                    });
                 }
             }
             @Override
@@ -76,6 +92,8 @@ public class FirmaFragment extends Fragment {
 
             }
         });
+
+
 
         return v;
     }

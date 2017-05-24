@@ -7,6 +7,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.Toast;
 
@@ -46,25 +47,43 @@ public class CompanyListFragment extends Fragment {
                 try {
                     JSONObject obj = new JSONObject(dataSnapshot.child("company_list").child(service_id + "").getValue().toString());
                     Iterator<String> keys = obj.keys();
-                    JSONArray companiesJson = new JSONArray();
+                    final JSONArray companiesJson = new JSONArray();
                     while (keys.hasNext()) {
                         String key = keys.next();
                         companiesJson.put(key);
                     }
                    //JSONArray companiesJson = new JSONArray(dataSnapshot.child("company_list").child(service_id + "").getValue().toString());
 
-                            List<Company> companies = new ArrayList<Company>();
+                    List<Company> companies = new ArrayList<Company>();
                     for (int i = 0; i < companiesJson.length(); i++) {
                         JSONObject compJson = new JSONObject(dataSnapshot.child("companies").child(companiesJson.getString(i)).getValue().toString().replaceAll(" ",""));
                         Company company =
                                 new Company(compJson.getString("name"),
-                                        compJson.getString("phone"),
-                                        compJson.getString("email"), compJson.getInt("serviceId"));
+                                            compJson.getString("phone"),
+                                            compJson.getString("email"), compJson.getInt("serviceId"));
 
                         companies.add(company);
                     }
+
                     CompanyListViewAdapter adapter = new CompanyListViewAdapter(getContext(), companies);
                     listView.setAdapter(adapter);
+
+                    listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                        @Override
+                        public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                         try {
+                             Toast.makeText(getContext(), companiesJson.get(position) + "", Toast.LENGTH_SHORT).show();
+                             Fragment fr = new UserCompanyFragment();
+                             Bundle bundle = new Bundle();
+                             bundle.putString("uid",companiesJson.get(position).toString());
+                             fr.setArguments(bundle);
+                             getActivity().getSupportFragmentManager().beginTransaction()
+                                     .replace(R.id.fragment_container,fr).addToBackStack("user").commit();
+                         }catch (Exception e){
+                             Toast.makeText(getContext(), e.getMessage(), Toast.LENGTH_SHORT).show();
+                         }
+                        }
+                    });
                 } catch (JSONException e) {
                     Toast.makeText(getContext(), e.getMessage(), Toast.LENGTH_SHORT).show();
                     Log.e("json",e.getMessage());
