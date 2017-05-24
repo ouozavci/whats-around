@@ -72,7 +72,7 @@ public class SignupFragment extends Fragment {
         return v;
     }
 
-    public void signup(String email, String pass, final String name, final String surname) {
+    public void signup(final String email, String pass, final String name, final String surname) {
         mAuth.createUserWithEmailAndPassword(email, pass)
                 .addOnCompleteListener(getActivity(), new OnCompleteListener<AuthResult>() {
                     @Override
@@ -83,7 +83,7 @@ public class SignupFragment extends Fragment {
                             FirebaseUser user = mAuth.getCurrentUser();
 
                             //Set the user type
-                            mDatabase.child("user_type").child(user.getUid()).setValue("user");
+                        /*    mDatabase.child("user_type").child(user.getUid()).setValue("user");
 
                             UserProfileChangeRequest profileUpdates = new UserProfileChangeRequest.Builder()
                                     .setDisplayName(name + " " + surname)
@@ -96,7 +96,10 @@ public class SignupFragment extends Fragment {
                                                 Log.d("signup", "User profile updated.");
                                             }
                                         }
-                                    });
+                                    });*/
+                            mDatabase.child("users").child(user.getUid().toString()).child("name").setValue(name);
+                            mDatabase.child("users").child(user.getUid().toString()).child("surname").setValue(surname);
+                            mDatabase.child("users").child(user.getUid().toString()).child("email").setValue(email);
                             updateUI(user);
                         } else {
                             Log.w("signup", "createUserWithEmail:failure", task.getException());
@@ -115,7 +118,7 @@ public class SignupFragment extends Fragment {
         } else {
             //Kullanıcıya özel sayfayı yükle
             Intent i = new Intent(getActivity(), UserActivity.class);
-            i.putExtra("email", user.getEmail());
+            i.putExtra("uid",user.getUid());
             startActivity(i);
         }
     }

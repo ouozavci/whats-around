@@ -120,9 +120,9 @@ public class FirmaSignupFragment extends Fragment {
                             // Sign in success, update UI with the signed-in user's information
                             Log.d("signup", "createUserWithEmail:success");
                             FirebaseUser user = mAuth.getCurrentUser();
-                            mDatabase.child("companies").child(comp.serviceId+"").child(user.getUid()).setValue(comp);
 
-                            mDatabase.child("user_type").child(user.getUid()).setValue("comp");
+                            mDatabase.child("companies").child(user.getUid()).setValue(comp);
+                            mDatabase.child("company_list").child(comp.serviceId+"").child(user.getUid()).setValue("0.0$0.0");
 
                             updateUI(user,user.getUid(),comp.serviceId);
                         } else {
@@ -141,8 +141,7 @@ public class FirmaSignupFragment extends Fragment {
         } else {
             //Kullanıcıya özel sayfayı yükle
             Intent i = new Intent(getActivity(), FirmaActivity.class);
-            i.putExtra("comp",uid);
-            i.putExtra("service",serviceId);
+            i.putExtra("uid",user.getUid());
             startActivity(i);
         }
     }

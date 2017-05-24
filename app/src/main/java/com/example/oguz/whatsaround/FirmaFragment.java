@@ -30,17 +30,26 @@ public class FirmaFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.fragment_firma,container,false);
-        final String comp_uid = getActivity().getIntent().getStringExtra("comp");
-        final int service_id = getActivity().getIntent().getIntExtra("service",-1);
+        final String uid = getActivity().getIntent().getStringExtra("uid");
+
+        if(uid==null) {
+            Toast.makeText(getContext(),"Something went wrong!",Toast.LENGTH_SHORT).show();
+            return null;
+        }
 
         final TextView textView = (TextView) v.findViewById(R.id.txtFirmaName);
 
-        mDatabase = FirebaseDatabase.getInstance().getReference();
+        mDatabase = FirebaseDatabase.getInstance().getReference().child("companies");
         mDatabase.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-                    String name = dataSnapshot.child("companies").child(service_id+"").child(comp_uid).child("name").getValue().toString();
+                if(dataSnapshot.child(uid).exists()){
+                    String name = dataSnapshot.child(uid).child("name").getValue().toString();
+                    String email = dataSnapshot.child(uid).child("email").getValue().toString();
+                    String phone = dataSnapshot.child(uid).child("phone").getValue().toString();
+
                     textView.setText(name);
+                }
             }
             @Override
             public void onCancelled(DatabaseError databaseError) {

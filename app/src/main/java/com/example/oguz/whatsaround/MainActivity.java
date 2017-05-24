@@ -47,19 +47,24 @@ public class MainActivity extends AppCompatActivity {
                     .replace(R.id.fragment_container,fr).addToBackStack("login").commit();
         }
         else {
-
             mDatabase.addListenerForSingleValueEvent(new ValueEventListener() {
                 @Override
                 public void onDataChange(DataSnapshot dataSnapshot) {
-                    String type = dataSnapshot.child("user_type").child(user.getUid()).getValue().toString();
-                    if(type.equals("comp")){
-                        Intent i = new Intent(MainActivity.this, FirmaActivity.class);
-
+                    DataSnapshot userRef = dataSnapshot.child("users").child(user.getUid());
+                    DataSnapshot compRef = dataSnapshot.child("companies").child(user.getUid());
+                    if(userRef.exists()){
+                        Intent i = new Intent(MainActivity.this, UserActivity.class);
+                        i.putExtra("uid",user.getUid().toString());
                         startActivity(i);
                     }
-                    else {
-                        Intent i = new Intent(MainActivity.this, UserActivity.class);
-                        i.putExtra("email",user.getEmail());
+                    else if(compRef.exists()){
+                        Intent i = new Intent(MainActivity.this, FirmaActivity.class);
+                        i.putExtra("uid",user.getUid().toString());
+                        startActivity(i);
+                    }else{
+                        Toast.makeText(getApplicationContext(),"Something went wrong!",Toast.LENGTH_SHORT).show();
+                        mAuth.signOut();
+                        Intent i = new Intent(MainActivity.this, MainActivity.class);
                         startActivity(i);
                     }
                 }

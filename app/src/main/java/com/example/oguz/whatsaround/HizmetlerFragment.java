@@ -66,7 +66,7 @@ public class HizmetlerFragment extends Fragment {
             rb[i]  = new RadioButton(getContext());
             rb[i].setId(i);
             rg.addView(rb[i]); //the RadioButtons are added to the radioGroup instead of the layout
-            rb[i].setText(array.get(i).toString());
+            rb[i].setText(array.getString(i));
         }
         submit.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
