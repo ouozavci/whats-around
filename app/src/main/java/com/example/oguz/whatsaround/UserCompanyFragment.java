@@ -1,5 +1,6 @@
 package com.example.oguz.whatsaround;
 
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
@@ -24,9 +25,15 @@ import com.google.firebase.database.ValueEventListener;
 
 public class UserCompanyFragment extends Fragment {
     DatabaseReference mDatabase;
+    ProgressDialog progressDialog;
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.fragment_user_company,container,false);
         final String uid = getArguments().getString("uid");
+
+        progressDialog = new ProgressDialog(getActivity());
+        progressDialog.setMessage("Bağlanıyor...");
+        progressDialog.setCancelable(false);
+        progressDialog.show();
 
         if(uid==null) {
             Toast.makeText(getContext(),"Something went wrong!",Toast.LENGTH_SHORT).show();
@@ -44,6 +51,7 @@ public class UserCompanyFragment extends Fragment {
         mDatabase.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
+                progressDialog.dismiss();
                 if(dataSnapshot.child("companies").child(uid).exists()){
                     String name = dataSnapshot.child("companies").child(uid).child("name").getValue().toString();
                     String email = dataSnapshot.child("companies").child(uid).child("email").getValue().toString();

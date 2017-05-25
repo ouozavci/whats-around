@@ -1,5 +1,6 @@
 package com.example.oguz.whatsaround;
 
+import android.app.ProgressDialog;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -33,12 +34,17 @@ public class CompanyListFragment extends Fragment {
 
     ListView listView;
     DatabaseReference mDatabase;
-
+    ProgressDialog progressDialog;
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.fragment_company_list, container, false);
         final int service_id = getArguments().getInt("service_id");
+
+        progressDialog = new ProgressDialog(getActivity());
+        progressDialog.setMessage("Bağlanıyor...");
+        progressDialog.setCancelable(false);
+        progressDialog.show();
 
         final double userLat = getArguments().getDouble("lat");
         final double userLng = getArguments().getDouble("lng");
@@ -49,6 +55,7 @@ public class CompanyListFragment extends Fragment {
         mDatabase.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
+                progressDialog.dismiss();
                 try {
                     JSONObject obj = new JSONObject(dataSnapshot.child("company_list").child(service_id + "").getValue().toString());
                     Iterator<String> keys = obj.keys();
@@ -83,7 +90,7 @@ public class CompanyListFragment extends Fragment {
                         @Override
                         public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                          try {
-                             Toast.makeText(getContext(), companiesJson.get(position) + "", Toast.LENGTH_SHORT).show();
+                            // Toast.makeText(getContext(), companiesJson.get(position) + "", Toast.LENGTH_SHORT).show();
                              Fragment fr = new UserCompanyFragment();
                              Bundle bundle = new Bundle();
                              bundle.putString("uid",companiesJson.get(position).toString());

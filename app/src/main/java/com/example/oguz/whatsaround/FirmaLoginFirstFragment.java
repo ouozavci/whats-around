@@ -28,6 +28,8 @@ public class FirmaLoginFirstFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.fragment_firma_login,container,false);
 
+
+
         Button btnSignup = (Button) v.findViewById(R.id.btnSingup);
         btnSignup.setOnClickListener(new View.OnClickListener() {
             @Override

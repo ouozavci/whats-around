@@ -36,12 +36,13 @@ public class UserActivity extends AppCompatActivity {
                 mAuth.signOut();
                 Intent i = new Intent(UserActivity.this,MainActivity.class);
                 startActivity(i);
+                finish();
             }
         });
 
         Fragment hizmetler = new HizmetlerFragment();
         this.getSupportFragmentManager().beginTransaction()
-                .replace(R.id.fragment_container,hizmetler).addToBackStack("user").commit();
+                .replace(R.id.fragment_container,hizmetler).commit();
 
     }
 }

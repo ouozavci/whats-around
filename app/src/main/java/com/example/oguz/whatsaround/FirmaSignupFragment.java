@@ -1,5 +1,6 @@
 package com.example.oguz.whatsaround;
 
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -47,11 +48,16 @@ public class FirmaSignupFragment extends Fragment {
 
     FirebaseAuth mAuth;
     DatabaseReference mDatabase;
-
+    ProgressDialog progressDialog;
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.fragment_firma_signup, container, false);
+
+        progressDialog = new ProgressDialog(getActivity());
+        progressDialog.setMessage("Bağlanıyor...");
+        progressDialog.setCancelable(false);
+        progressDialog.show();
 
         mAuth = FirebaseAuth.getInstance();
         mDatabase = FirebaseDatabase.getInstance().getReference();
@@ -69,6 +75,7 @@ public class FirmaSignupFragment extends Fragment {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 List<String> result = new ArrayList<String>();
+                progressDialog.dismiss();
                 try {
                     JSONArray hizmetler = new JSONArray(dataSnapshot.child("Hizmetler").getValue().toString());
                     for(int i = 0;i<hizmetler.length();i++){
@@ -90,6 +97,7 @@ public class FirmaSignupFragment extends Fragment {
         btnOk.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                progressDialog.show();
                 String name = txtName.getText().toString();
                 String phone = txtPhone.getText().toString();
                 String email = txtEmail.getText().toString();
@@ -116,6 +124,7 @@ public class FirmaSignupFragment extends Fragment {
                 .addOnCompleteListener(getActivity(), new OnCompleteListener<AuthResult>() {
                     @Override
                     public void onComplete(@NonNull Task<AuthResult> task) {
+                        progressDialog.dismiss();
                         if (task.isSuccessful()) {
                             // Sign in success, update UI with the signed-in user's information
                             Log.d("signup", "createUserWithEmail:success");

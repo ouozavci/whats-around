@@ -1,5 +1,6 @@
 package com.example.oguz.whatsaround;
 
+import android.app.ProgressDialog;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -25,6 +26,7 @@ import org.json.JSONException;
 public class FirmaFragment extends Fragment {
 
     DatabaseReference mDatabase;
+    ProgressDialog progressDialog;
 
     @Nullable
     @Override
@@ -37,6 +39,11 @@ public class FirmaFragment extends Fragment {
             return null;
         }
 
+        progressDialog = new ProgressDialog(getActivity());
+        progressDialog.setMessage("Bağlanıyor...");
+        progressDialog.setCancelable(false);
+        progressDialog.show();
+
         final TextView textView = (TextView) v.findViewById(R.id.txtFirmaName);
         final TextView tvPhone = (TextView) v.findViewById(R.id.tvPhone);
 
@@ -44,6 +51,7 @@ public class FirmaFragment extends Fragment {
         mDatabase.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
+                progressDialog.dismiss();
                 if(dataSnapshot.child("companies").child(uid).exists()){
                     String name = dataSnapshot.child("companies").child(uid).child("name").getValue().toString();
                     String email = dataSnapshot.child("companies").child(uid).child("email").getValue().toString();

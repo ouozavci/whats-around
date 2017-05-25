@@ -1,5 +1,6 @@
 package com.example.oguz.whatsaround;
 
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -32,11 +33,17 @@ public class FirmaLoginFragment extends Fragment {
 
     FirebaseAuth mAuth;
     DatabaseReference mDatabase;
+    ProgressDialog progressDialog;
 
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.fragment_firma_login_first,container,false);
+
+        progressDialog = new ProgressDialog(getActivity());
+        progressDialog.setMessage("Bağlanıyor...");
+        progressDialog.setCancelable(false);
+
 
         mAuth = FirebaseAuth.getInstance();
         mDatabase = FirebaseDatabase.getInstance().getReference().child("companies");
@@ -48,12 +55,14 @@ public class FirmaLoginFragment extends Fragment {
         btnOk.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                progressDialog.show();
                 String email = txtEmail.getText().toString();
                 String pass = txtPass.getText().toString();
 
                 mAuth.signInWithEmailAndPassword(email,pass).addOnCompleteListener(getActivity(),new OnCompleteListener<AuthResult>() {
                     @Override
                     public void onComplete(@NonNull Task<AuthResult> task) {
+                        progressDialog.dismiss();
                         if(task.isSuccessful()){
                             Log.d("login", "signInWithEmail:success");
                             final FirebaseUser user = mAuth.getCurrentUser();

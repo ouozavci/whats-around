@@ -27,7 +27,7 @@ public class FirmaActivity extends AppCompatActivity {
 
         Fragment fr = new FirmaFragment();
         this.getSupportFragmentManager().beginTransaction()
-                .replace(R.id.fragment_container,fr).addToBackStack("firma").commit();
+                .replace(R.id.fragment_container,fr).commit();
 
         Button btnSignout = (Button) findViewById(R.id.btnSignout);
         btnSignout.setOnClickListener(new View.OnClickListener() {
@@ -36,6 +36,7 @@ public class FirmaActivity extends AppCompatActivity {
                 mAuth.signOut();
                 Intent i = new Intent(FirmaActivity.this,MainActivity.class);
                 startActivity(i);
+                finish();
             }
         });
 
