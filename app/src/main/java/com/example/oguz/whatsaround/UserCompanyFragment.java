@@ -57,8 +57,8 @@ public class UserCompanyFragment extends Fragment {
 
                     String strLat = latlng.split("-")[0];
 
-                    Double lat = Double.valueOf(latlng.split("-")[0]);
-                    Double lng = Double.valueOf(latlng.split("-")[1]);
+                    final Double lat = Double.valueOf(latlng.split("-")[0]);
+                    final Double lng = Double.valueOf(latlng.split("-")[1]);
 
                     Bundle bundle = new Bundle();
                     bundle.putDouble("lat",lat);
@@ -82,6 +82,14 @@ public class UserCompanyFragment extends Fragment {
                         @Override
                         public void onClick(View v) {
                             Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse("sms:" + phone));
+                            startActivity(intent);
+                        }
+                    });
+                    btnDirections.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            Intent intent = new Intent(android.content.Intent.ACTION_VIEW,
+                                    Uri.parse("http://maps.google.com/maps?daddr="+lat+","+lng));
                             startActivity(intent);
                         }
                     });
