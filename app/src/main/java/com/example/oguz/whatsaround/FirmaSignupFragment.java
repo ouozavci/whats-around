@@ -130,7 +130,7 @@ public class FirmaSignupFragment extends Fragment {
                             double lat = getArguments().getDouble("lat");
                             double lng = getArguments().getDouble("lng");
 
-                            mDatabase.child("company_list").child(comp.getServiceId()+"").child(user.getUid()).setValue(lat+"/"+lng);
+                            mDatabase.child("company_list").child(comp.getServiceId()+"").child(user.getUid()).setValue(lat+"-"+lng);
 
                             updateUI(user,user.getUid(),comp.getServiceId());
                         } else {

@@ -39,6 +39,11 @@ public class CompanyListFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.fragment_company_list, container, false);
         final int service_id = getArguments().getInt("service_id");
+
+        final double userLat = getArguments().getDouble("lat");
+        final double userLng = getArguments().getDouble("lng");
+        final double limit = getArguments().getDouble("distance");
+
         mDatabase = FirebaseDatabase.getInstance().getReference();
 
         mDatabase.addListenerForSingleValueEvent(new ValueEventListener() {
@@ -49,8 +54,14 @@ public class CompanyListFragment extends Fragment {
                     Iterator<String> keys = obj.keys();
                     final JSONArray companiesJson = new JSONArray();
                     while (keys.hasNext()) {
+
                         String key = keys.next();
-                        companiesJson.put(key);
+                        Double lat = Double.parseDouble(obj.getString(key).split("-")[0]);
+                        Double lng = Double.parseDouble(obj.getString(key).split("-")[1]);
+
+                        double distance = DistanceCalculator.distance(userLat,userLng,lat,lng,"K");
+                        if(distance < limit)
+                            companiesJson.put(key);
                     }
                    //JSONArray companiesJson = new JSONArray(dataSnapshot.child("company_list").child(service_id + "").getValue().toString());
 
